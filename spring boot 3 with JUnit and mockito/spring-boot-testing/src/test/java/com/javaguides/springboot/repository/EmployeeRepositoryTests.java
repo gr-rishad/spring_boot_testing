@@ -2,6 +2,7 @@ package com.javaguides.springboot.repository;
 
 import com.javaguides.springboot.model.Employee;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,17 +17,28 @@ public class EmployeeRepositoryTests {
     @Autowired
     private EmployeeRepository employeeRepository;
 
+    private Employee employee;
+
+    @BeforeEach
+    public void setUp() {
+        employee = Employee.builder()
+                .firstName("Golam Rabbani")
+                .lastName("Rishad")
+                .email("gr.rishad@gmail.com")
+                .build();
+    }
+
     // JUnit test for save employee operation
     @DisplayName("JUnit test for save employee operation")
     @Test
     public void givenEmployeeObject_whenSave_thenReturnSavedEmployee() {
 
         // given -> precondition or setup
-        Employee employee = Employee.builder()
-                .firstName("Golam Rabbani")
-                .lastName("Rishad")
-                .email("gr.rishad@gmail.com")
-                .build();
+//        Employee employee = Employee.builder()
+//                .firstName("Golam Rabbani")
+//                .lastName("Rishad")
+//                .email("gr.rishad@gmail.com")
+//                .build();
 
         // when -> action or behavior that we are going to test
         Employee savedEmployee = employeeRepository.save(employee);
@@ -41,11 +53,11 @@ public class EmployeeRepositoryTests {
     @Test
     public void givenEmployeeList_whenFindAll_thenEmployeesList() {
         // given ->  precondition or setup
-        Employee employee = Employee.builder()
-                .firstName("Golam Rabbani")
-                .lastName("Rishad")
-                .email("gr.rishad@gmail.com")
-                .build();
+//        Employee employee = Employee.builder()
+//                .firstName("Golam Rabbani")
+//                .lastName("Rishad")
+//                .email("gr.rishad@gmail.com")
+//                .build();
 
         Employee employee1 = Employee.builder()
                 .firstName("Tamim")
@@ -69,11 +81,11 @@ public class EmployeeRepositoryTests {
     @Test
     public void givenEmployeeObject_whenFindById_thenReturnEmployeeObject() {
         // given ->  precondition or setup
-        Employee employee = Employee.builder()
-                .firstName("Golam Rabbani")
-                .lastName("Rishad")
-                .email("gr.rishad@gmail.com")
-                .build();
+//        Employee employee = Employee.builder()
+//                .firstName("Golam Rabbani")
+//                .lastName("Rishad")
+//                .email("gr.rishad@gmail.com")
+//                .build();
 
         employeeRepository.save(employee);
 
@@ -91,11 +103,11 @@ public class EmployeeRepositoryTests {
     @Test
     public void givenEmployeeEmail_whenFindByEmail_thenEmployeeObject() {
         // given ->  precondition or setup
-        Employee employee = Employee.builder()
-                .firstName("Asif")
-                .lastName("Akbar")
-                .email("asif@gmail.com")
-                .build();
+//        Employee employee = Employee.builder()
+//                .firstName("Golam Rabbani")
+//                .lastName("Rishad")
+//                .email("gr.rishad@gmail.com")
+//                .build();
         employeeRepository.save(employee);
 
         // when -> action or the behavior that we are testing
@@ -110,11 +122,11 @@ public class EmployeeRepositoryTests {
     @Test
     public void givenEmployeeObject_whenUpdateEmployee_thenReturnUpdatedEmployee() {
         // given ->  precondition or setup
-        Employee employee = Employee.builder()
-                .firstName("Asif")
-                .lastName("Akbar")
-                .email("asif@gmail.com")
-                .build();
+//        Employee employee = Employee.builder()
+//                .firstName("Golam Rabbani")
+//                .lastName("Rishad")
+//                .email("gr.rishad@gmail.com")
+//                .build();
         employeeRepository.save(employee);
 
         // when -> action or the behavior that we are testing
@@ -133,11 +145,11 @@ public class EmployeeRepositoryTests {
     @Test
     public void givenEmployeeObject_whenDelete_thenRemoveEmployee() {
         // given ->  precondition or setup
-        Employee employee = Employee.builder()
-                .firstName("Asif")
-                .lastName("Akbar")
-                .email("asif@gmail.com")
-                .build();
+//        Employee employee = Employee.builder()
+//                .firstName("Golam Rabbani")
+//                .lastName("Rishad")
+//                .email("gr.rishad@gmail.com")
+//                .build();
         employeeRepository.save(employee);
 
         // when -> action or the behavior that we are testing
@@ -148,5 +160,82 @@ public class EmployeeRepositoryTests {
         // then -> verify the output
         Assertions.assertThat(employeeOptional).isEmpty();
     }
+
+    // JUnit test for custom query using JPQL with index
+    @DisplayName("JUnit test for custom query using JPQL with index param")
+    @Test
+    public void givenFirstNameAndLastName_whenFindByJPQL_thenReturnEmployeeObject() {
+        // given ->  precondition or setup
+//        Employee employee = Employee.builder()
+//                .firstName("Golam Rabbani")
+//                .lastName("Rishad")
+//                .email("gr.rishad@gmail.com")
+//                .build();
+        employeeRepository.save(employee);
+
+        // when -> action or the behavior that we are testing
+        Employee employeeObj = employeeRepository.findByJPQL(employee.getFirstName(), employee.getLastName());
+
+        // then -> verify the output
+        Assertions.assertThat(employeeObj).isNotNull();
+    }
+
+    // JUnit test for custom query using JPQL with index
+    @DisplayName("JUnit test for custom query using JPQL with named params")
+    @Test
+    public void givenFirstNameAndLastName_whenFindByJPQLNamedParam_thenReturnEmployeeObject() {
+        // given ->  precondition or setup
+//        Employee employee = Employee.builder()
+//                .firstName("Golam Rabbani")
+//                .lastName("Rishad")
+//                .email("gr.rishad@gmail.com")
+//                .build();
+        employeeRepository.save(employee);
+
+        // when -> action or the behavior that we are testing
+        Employee employeeObj = employeeRepository.findByJPQL(employee.getFirstName(), employee.getLastName());
+
+        // then -> verify the output
+        Assertions.assertThat(employeeObj).isNotNull();
+    }
+
+    // JUnit test for custom query using native SQL with index
+    @DisplayName("JUnit test for custom query using native SQL with index")
+    @Test
+    public void givenFirstNameAndLastName_whenFindByNativeSQL_thenReturnEmployeeObject() {
+        // given ->  precondition or setup
+//        Employee employee = Employee.builder()
+//                .firstName("Golam Rabbani")
+//                .lastName("Rishad")
+//                .email("gr.rishad@gmail.com")
+//                .build();
+        employeeRepository.save(employee);
+
+        // when -> action or the behavior that we are testing
+        Employee savedEmployee = employeeRepository.findByNativeSQL(employee.getFirstName(), employee.getLastName());
+
+        // then -> verify the output
+        Assertions.assertThat(savedEmployee).isNotNull();
+    }
+
+    // JUnit test for custom query using native SQL with index
+    @DisplayName("JUnit test for custom query using native SQL with named params")
+    @Test
+    public void givenFirstNameAndLastName_whenFindByNativeSQLNamedParams_thenReturnEmployeeObject() {
+        // given ->  precondition or setup
+//        Employee employee = Employee.builder()
+//                .firstName("Golam Rabbani")
+//                .lastName("Rishad")
+//                .email("gr.rishad@gmail.com")
+//                .build();
+        employeeRepository.save(employee);
+
+        // when -> action or the behavior that we are testing
+        Employee savedEmployee = employeeRepository.findByNativeSQLNamedParams(employee.getFirstName(), employee.getLastName());
+
+        // then -> verify the output
+        Assertions.assertThat(savedEmployee).isNotNull();
+    }
+
 
 }
