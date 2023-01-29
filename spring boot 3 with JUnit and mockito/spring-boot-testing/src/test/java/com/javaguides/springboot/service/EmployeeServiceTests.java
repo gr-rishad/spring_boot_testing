@@ -14,6 +14,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
@@ -84,5 +86,61 @@ public class EmployeeServiceTests {
 
         // then --> verify the output
         Mockito.verify(employeeRepository, Mockito.never()).save(Mockito.any(Employee.class));
+    }
+
+    // JUnit test for getAllEmployees method
+    @DisplayName("JUnit test for getAllEmployees method")
+    @Test
+    public void givenEmployeesList_whenGetAllEmployees_thenReturnEmployeesList() {
+        // given ->  precondition or setup
+        Employee employee1 = Employee.builder()
+                .id(2L)
+                .firstName("Tony")
+                .lastName("Stark")
+                .email("tony@gmail.com")
+                .build();
+        BDDMockito.given(employeeRepository.findAll()).willReturn(List.of(employee, employee1));
+
+        // when -> action or the behavior that we are testing
+        List<Employee> employeeList = employeeService.getAllEmployees();
+
+        // then -> verify the output
+        Assertions.assertThat(employeeList).isNotNull();
+        Assertions.assertThat(employeeList.size()).isEqualTo(2);
+    }
+
+    @DisplayName("JUnit test for getAllEmployees method")
+    @Test
+    public void givenEmployeesList_whenGetAllEmployees_thenReturnEmptyEmployeesList() {
+        // given ->  precondition or setup
+        Employee employee1 = Employee.builder()
+                .id(2L)
+                .firstName("Tony")
+                .lastName("Stark")
+                .email("tony@gmail.com")
+                .build();
+        BDDMockito.given(employeeRepository.findAll()).willReturn(Collections.emptyList());
+
+        // when -> action or the behavior that we are testing
+        List<Employee> employeeList = employeeService.getAllEmployees();
+
+        // then -> verify the output
+        Assertions.assertThat(employeeList).isEmpty();
+        Assertions.assertThat(employeeList.size()).isEqualTo(0);
+    }
+
+    // JUnit test for getEmployeeId method
+    @DisplayName("JUnit test for getEmployeeId method")
+    @Test
+    public void givenEmployeeId_whenGetEmployeeId_thenReturnEmployeeObject() {
+
+        // given ->  precondition or setup
+        BDDMockito.given(employeeRepository.findById(employee.getId())).willReturn(Optional.of(employee));
+
+        // when -> action or the behavior that we are testing
+        Employee savedEmployee=employeeService.getEmployeeById(employee.getId()).get();
+
+        // then -> verify the output
+        Assertions.assertThat(savedEmployee).isNotNull();
     }
 }
