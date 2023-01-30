@@ -138,9 +138,43 @@ public class EmployeeServiceTests {
         BDDMockito.given(employeeRepository.findById(employee.getId())).willReturn(Optional.of(employee));
 
         // when -> action or the behavior that we are testing
-        Employee savedEmployee=employeeService.getEmployeeById(employee.getId()).get();
+        Employee savedEmployee = employeeService.getEmployeeById(employee.getId()).get();
 
         // then -> verify the output
         Assertions.assertThat(savedEmployee).isNotNull();
+    }
+
+    // JUnit test for update Employee method
+    @DisplayName("JUnit test for update Employee method")
+    @Test
+    public void givenEmployeeObject_whenUpdateEmployee_thenReturnUpdatedEmployee() {
+        // given ->  precondition or setup
+        BDDMockito.given(employeeRepository.save(employee)).willReturn(employee);
+        employee.setEmail("rabbani@gmail.com");
+        employee.setFirstName("Shakib");
+
+        // when -> action or the behavior that we are testing
+        Employee updatedEmployee = employeeService.updateEmployee(employee);
+
+        // then -> verify the output
+        Assertions.assertThat(updatedEmployee.getEmail()).isEqualTo("rabbani@gmail.com");
+        Assertions.assertThat(updatedEmployee.getFirstName()).isEqualTo("Shakib");
+    }
+
+    // JUnit test for delete employee method
+    @DisplayName("JUnit test for delete employee method")
+    @Test
+    public void given_when_then() {
+
+        // given ->  precondition or setup
+        long employeeId = 1L;
+        BDDMockito.willDoNothing().given(employeeRepository).deleteById(employeeId);
+
+        // when -> action or the behavior that we are testing
+        employeeService.deleteEmployee(employeeId);
+
+        // then -> verify the output
+        BDDMockito.verify(employeeRepository, Mockito.times(1)).deleteById(employeeId);
+
     }
 }
