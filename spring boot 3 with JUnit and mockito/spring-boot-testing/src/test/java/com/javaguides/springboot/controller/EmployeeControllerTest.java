@@ -63,7 +63,6 @@ public class EmployeeControllerTest {
                         CoreMatchers.is(employee.getLastName())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.email",
                         CoreMatchers.is(employee.getEmail())));
-
     }
 
     // JUnit test for getAll employees
